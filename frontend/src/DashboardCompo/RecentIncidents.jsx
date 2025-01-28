@@ -13,7 +13,7 @@ const RecentIncidents = () => {
       try {
         const token = localStorage.getItem('token');
         // First fetch incidents
-        const response = await axios.get('http://localhost:3000/api/incidents', {
+        const response = await axios.get('https://hopesalive-zh55.onrender.com/api/incidents', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -24,7 +24,7 @@ const RecentIncidents = () => {
           if (incident.volunteerActivity?.assignedVolunteer) {
             try {
               const volunteerResponse = await axios.get(
-                `http://localhost:3000/api/volunteer/${incident.volunteerActivity.assignedVolunteer}`,
+                `https://hopesalive-zh55.onrender.com/api/volunteer/${incident.volunteerActivity.assignedVolunteer}`,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`
@@ -64,7 +64,7 @@ const RecentIncidents = () => {
       const token = localStorage.getItem('token');
       
       const response = await axios.put(
-        `http://localhost:3000/api/ngo/incidents/${incidentId}/update`,
+        `https://hopesalive-zh55.onrender.com/api/ngo/incidents/${incidentId}/update`,
         {
           status: newStatus,
           status_update: `Status updated to ${newStatus} by NGO`,
@@ -155,7 +155,7 @@ const RecentIncidents = () => {
             <div className="relative h-48 bg-gray-200 flex items-center justify-center">
               {incident.animalInfo?.photo && (
                 <img
-                  src={`http://localhost:3000/api/uploads/${incident.animalInfo.photo}`}
+                  src={`https://hopesalive-zh55.onrender.com/api/uploads/${incident.animalInfo.photo}`}
                   alt={incident.animalInfo?.type || 'Animal'}
                   className="w-full h-full object-cover"
                   onError={(e) => {

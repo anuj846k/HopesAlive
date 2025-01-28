@@ -93,7 +93,7 @@ function ReportIncident() {
       const userRole = localStorage.getItem("userRole"); // Get user role
 
       const response = await fetch(
-        "http://localhost:3000/api/incidents/create",
+        "https://hopesalive-zh55.onrender.com/api/incidents/create",
         {
           method: "POST",
           headers: {

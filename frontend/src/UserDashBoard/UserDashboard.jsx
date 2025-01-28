@@ -56,14 +56,14 @@ const UserDashboard = () => {
                 const token = localStorage.getItem('token');
                 const userId = localStorage.getItem('userId');
 
-                const userResponse = await axios.get(`http://localhost:3000/api/users/profile/${userId}`, {
+                const userResponse = await axios.get(`https://hopesalive-zh55.onrender.com/api/users/profile/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
                 setUserName(userResponse.data.name);
 
-                const incidentsResponse = await axios.get(`http://localhost:3000/api/users/my-incidents/${userId}`, {
+                const incidentsResponse = await axios.get(`https://hopesalive-zh55.onrender.com/api/users/my-incidents/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

@@ -21,7 +21,7 @@ function IncidentList() {
   const fetchIncidents = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/api/volunteer/incidents', {
+      const response = await axios.get('https://hopesalive-zh55.onrender.com/api/volunteer/incidents', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -46,7 +46,7 @@ function IncidentList() {
   const fetchAssignedIncidents = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/api/volunteer/my-assignments', {
+      const response = await axios.get('https://hopesalive-zh55.onrender.com/api/volunteer/my-assignments', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -82,7 +82,7 @@ function IncidentList() {
       const token = localStorage.getItem('token');
 
       const response = await axios.put(
-        `http://localhost:3000/api/volunteer/incidents/${incidentId}/volunteer/update`,
+        `https://hopesalive-zh55.onrender.com/api/volunteer/incidents/${incidentId}/volunteer/update`,
         {
           volunteer_status: "On the way",
           status_update: "Volunteer is heading to the location"

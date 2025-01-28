@@ -23,7 +23,7 @@ const Navbar = () => {
         console.log("Token:", token);
 
         const response = await axios.get(
-          "http://localhost:3000/api/ngo/profile",
+          "https://hopesalive-zh55.onrender.com/api/ngo/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,

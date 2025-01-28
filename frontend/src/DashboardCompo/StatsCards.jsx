@@ -18,7 +18,7 @@ const StatsCards = forwardRef((props, ref) => {
         throw new Error('No authentication token found');
       }
 
-      const response = await axios.get('http://localhost:3000/api/ngo/overview', {
+      const response = await axios.get('https://hopesalive-zh55.onrender.com/api/ngo/overview', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

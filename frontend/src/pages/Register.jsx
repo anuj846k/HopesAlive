@@ -48,10 +48,10 @@ const RegisterForm = () => {
     
     try {
       // Log the request details
-      console.log('Attempting to connect to:', 'http://localhost:3000/api/users/register');
+      console.log('Attempting to connect to:', 'https://hopesalive-zh55.onrender.com/api/users/register');
       console.log('With data:', formData);
 
-      const response = await fetch('http://localhost:3000/api/users/register', {
+      const response = await fetch('https://hopesalive-zh55.onrender.com/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

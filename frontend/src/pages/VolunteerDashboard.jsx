@@ -38,7 +38,7 @@ const VolunteerDashboard = () => {
         const token = localStorage.getItem('token');
         console.log('Using token:', token?.substring(0, 20) + '...');
 
-        const response = await axios.get('http://localhost:3000/api/volunteer/incidents', {
+        const response = await axios.get('https://hopesalive-zh55.onrender.com/api/volunteer/incidents', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -53,7 +53,7 @@ const VolunteerDashboard = () => {
 
         // Fetch notifications
         const notificationsResponse = await axios.get(
-          'http://localhost:3000/api/volunteer/notifications',
+          'https://hopesalive-zh55.onrender.com/api/volunteer/notifications',
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
