@@ -100,7 +100,7 @@ const RegisterForm = () => {
   };
 
   const handleRegistrationSuccess = (data) => {
-    // Store the token
+    // Store the token 
     if (data.token) {
         localStorage.setItem('token', data.token);
     }
@@ -113,7 +113,7 @@ const RegisterForm = () => {
         if (formData.role === 'ngo') {
             navigate('/dashboard');
         } else if (formData.role === 'volunteer') {
-            navigate('/voldash');
+            navigate('/volunteer/dashboard');
         } else {
             navigate('/user-dashboard');
         }
