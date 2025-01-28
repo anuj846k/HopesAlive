@@ -113,7 +113,7 @@ const RegisterForm = () => {
         if (formData.role === 'ngo') {
             navigate('/dashboard');
         } else if (formData.role === 'volunteer') {
-            navigate('/volunteer/dashboard');
+            navigate('/voldash');
         } else {
             navigate('/user-dashboard');
         }
