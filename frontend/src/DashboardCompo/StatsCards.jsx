@@ -1,6 +1,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { motion } from 'framer-motion';
 
 const StatsCards = forwardRef((props, ref) => {
   const [stats, setStats] = useState({
@@ -13,11 +14,6 @@ const StatsCards = forwardRef((props, ref) => {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token');
-      
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
       const response = await axios.get('https://hopesalive-zh55.onrender.com/api/ngo/overview', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -47,49 +43,98 @@ const StatsCards = forwardRef((props, ref) => {
     fetchStats();
   }, []);
 
+  const cardConfig = {
+    total: {
+      title: 'Total Cases',
+      icon: '🐾',
+      description: 'All reported animal incidents',
+      bgColor: 'bg-blue-50',
+      textColor: 'text-blue-600',
+      borderColor: 'border-blue-200',
+      hoverColor: 'hover:bg-blue-100'
+    },
+    critical: {
+      title: 'Critical Cases',
+      icon: '🚨',
+      description: 'Urgent attention needed',
+      bgColor: 'bg-red-50',
+      textColor: 'text-red-600',
+      borderColor: 'border-red-200',
+      hoverColor: 'hover:bg-red-100'
+    },
+    pending: {
+      title: 'Pending Cases',
+      icon: '🏥',
+      description: 'Awaiting action',
+      bgColor: 'bg-yellow-50',
+      textColor: 'text-yellow-600',
+      borderColor: 'border-yellow-200',
+      hoverColor: 'hover:bg-yellow-100'
+    },
+    resolved: {
+      title: 'Rescued Animals',
+      icon: '💚',
+      description: 'Successfully helped',
+      bgColor: 'bg-green-50',
+      textColor: 'text-green-600',
+      borderColor: 'border-green-200',
+      hoverColor: 'hover:bg-green-100'
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-gray-500 text-sm">Total Cases</h3>
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-2xl font-semibold text-blue-600">{stats.total}</p>
-          <div className="p-2 bg-blue-100 rounded-full">
-            <span className="text-blue-500">📋</span>
-          </div>
-        </div>
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+      {Object.entries(stats).map(([key, value]) => {
+        const config = cardConfig[key];
+        return (
+          <motion.div
+            key={key}
+            className={`relative overflow-hidden rounded-xl border ${config.borderColor} ${config.bgColor} ${config.hoverColor} transition-all duration-300`}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <span className="text-2xl sm:text-3xl" role="img" aria-label={config.title}>
+                  {config.icon}
+                </span>
+                <span className={`text-3xl sm:text-4xl font-bold ${config.textColor}`}>
+                  {value}
+                </span>
+              </div>
+              
+              <div>
+                <h3 className={`text-base sm:text-lg font-semibold ${config.textColor}`}>
+                  {config.title}
+                </h3>
+                <p className="text-gray-600 text-xs sm:text-sm mt-1">
+                  {config.description}
+                </p>
+              </div>
 
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-gray-500 text-sm">Critical Cases</h3>
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-2xl font-semibold text-red-600">{stats.critical}</p>
-          <div className="p-2 bg-red-100 rounded-full">
-            <span className="text-red-500">⚠️</span>
-          </div>
-        </div>
-      </div>
+              {/* Progress indicator */}
+              <div className="mt-3 sm:mt-4">
+                <div className={`h-1 w-full bg-gray-200 rounded-full overflow-hidden`}>
+                  <div 
+                    className={`h-full ${config.textColor.replace('text', 'bg')} transition-all duration-500`}
+                    style={{ 
+                      width: `${(value / (stats.total || 1)) * 100}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
 
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-gray-500 text-sm">Pending</h3>
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-2xl font-semibold text-yellow-600">{stats.pending}</p>
-          <div className="p-2 bg-yellow-100 rounded-full">
-            <span className="text-yellow-500">⏳</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-gray-500 text-sm">Resolved</h3>
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-2xl font-semibold text-green-600">{stats.resolved}</p>
-          <div className="p-2 bg-green-100 rounded-full">
-            <span className="text-green-500">✅</span>
-          </div>
-        </div>
-      </div>
+            {/* Decorative pattern */}
+            <div className="absolute -right-6 -bottom-6 opacity-10">
+              <span className="text-6xl sm:text-8xl">{config.icon}</span>
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 });
+
+StatsCards.displayName = 'StatsCards';
 
 export default StatsCards;

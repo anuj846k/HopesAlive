@@ -1,123 +1,66 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
-const RecentIncidents = ({ onStatusUpdate = () => {} }) => {
+const Incidents = () => {
+  const navigate = useNavigate();
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
   const [error, setError] = useState(null);
-  const [updatingStatus, setUpdatingStatus] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchIncidents = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('https://hopesalive-zh55.onrender.com/api/incidents', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        // Sort incidents by date and take only the 6 most recent ones
-        const sortedIncidents = response.data.sort((a, b) => 
-          new Date(b.createdAt) - new Date(a.createdAt)
-        ).slice(0, 6);
-
-        // For each incident that has an assigned volunteer, fetch volunteer details
-        const incidentsWithVolunteers = await Promise.all(sortedIncidents.map(async (incident) => {
-          if (incident.volunteerActivity?.assignedVolunteer) {
-            try {
-              const volunteerResponse = await axios.get(
-                `https://hopesalive-zh55.onrender.com/api/volunteer/${incident.volunteerActivity.assignedVolunteer}`,
-                {
-                  headers: { Authorization: `Bearer ${token}` }
-                }
-              );
-              return {
-                ...incident,
-                volunteerActivity: {
-                  ...incident.volunteerActivity,
-                  volunteerDetails: volunteerResponse.data
-                }
-              };
-            } catch (err) {
-              console.error('Error fetching volunteer details:', err);
-              return incident;
-            }
-          }
-          return incident;
-        }));
-
-        setIncidents(incidentsWithVolunteers);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching incidents:', err);
-        setError('Failed to load incidents');
-        setLoading(false);
-      }
-    };
-
     fetchIncidents();
   }, []);
 
-  const handleStatusUpdate = async (incidentId, newStatus) => {
+  const fetchIncidents = async () => {
     try {
-      setUpdatingStatus(incidentId);
       const token = localStorage.getItem('token');
-      
-      const response = await axios.put(
-        `https://hopesalive-zh55.onrender.com/api/ngo/incidents/${incidentId}/update`,
-        {
-          status: newStatus,
-          status_update: `Status updated to ${newStatus} by NGO`,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      if (!token) throw new Error('No authentication token found');
 
-      if (response.data.success) {
-        setIncidents(prevIncidents =>
-          prevIncidents.map(incident =>
-            incident._id === incidentId
-              ? { ...incident, status: newStatus }
-              : incident
-          )
-        );
-        toast.success('Status updated successfully');
-        if (typeof onStatusUpdate === 'function') {
-          onStatusUpdate();
+      const response = await axios.get('https://hopesalive-zh55.onrender.com/api/incidents', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
+      });
+      console.log(response.data);
+
+      if (response.data) {
+        setIncidents(response.data);
+      } else {
+        throw new Error('No data received from server');
       }
-    } catch (error) {
-      console.error('Error updating status:', error);
-      toast.error('Failed to update status');
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      toast.error('Failed to load incidents');
     } finally {
-      setUpdatingStatus(null);
+      setLoading(false);
     }
   };
 
-  const handleViewDetails = (incidentId) => {
-    navigate(`/dashboard/incidents/${incidentId}`);
+  
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'resolved': return 'bg-green-100 text-green-800';
+      case 'in progress': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-yellow-100 text-yellow-800';
+    }
   };
 
-  const handleViewAll = () => {
-    navigate('/dashboard/incidents');
+  const handleViewDetails = (id) => {
+    navigate(`/dashboard/incidents/${id}`);
   };
 
   if (loading) {
     return (
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6">Recent Incidents</h2>
+        <h2 className="text-2xl font-bold mb-6">All Incidents</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, index) => (
+          {[...Array(8)].map((_, index) => (
             <div key={index} className="bg-white rounded-lg shadow-lg p-4">
               <div className="animate-pulse">
                 <div className="h-48 bg-gray-200 rounded"></div>
@@ -133,38 +76,31 @@ const RecentIncidents = ({ onStatusUpdate = () => {} }) => {
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6">Recent Incidents</h2>
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      </div>
-    );
-  }
+  const filteredIncidents = incidents.filter(incident => 
+    filter === 'all' ? true : incident.status === filter
+  );
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-800">Recent Incidents</h2>
-          <p className="text-gray-600 text-sm mt-1">Showing the 6 most recent cases that need attention</p>
+          <h2 className="text-2xl font-semibold text-gray-800">All Incidents</h2>
+          <p className="text-gray-600 text-sm mt-1">Manage and track all reported cases</p>
         </div>
-        <button
-          onClick={handleViewAll}
-          className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2 shadow-sm"
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 focus:ring-2 focus:ring-blue-500"
         >
-          View All Incidents
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+          <option value="all">All Incidents</option>
+          <option value="pending">Pending</option>
+          <option value="in progress">In Progress</option>
+          <option value="resolved">Resolved</option>
+        </select>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {incidents.map((incident) => (
+        {filteredIncidents.map((incident) => (
           <motion.div
             key={incident._id}
             className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100"
@@ -186,7 +122,7 @@ const RecentIncidents = ({ onStatusUpdate = () => {} }) => {
                   alt={incident.animalInfo?.type || 'Animal'}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.target.src = '/not_found.png'; // Fallback image
+                    e.target.src = '/not_found.png';
                     e.target.classList.add('object-contain', 'p-2');
                   }}
                 />
@@ -290,27 +226,14 @@ const RecentIncidents = ({ onStatusUpdate = () => {} }) => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="mt-4 flex gap-2">
+              {/* View Details Button */}
+              <div className="mt-4">
                 <button 
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
                   onClick={() => handleViewDetails(incident._id)}
                 >
                   View Details
                 </button>
-                <select
-                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors duration-200
-                    ${incident.status === 'resolved' ? 'border-green-500 text-green-700 bg-green-50' : 
-                      incident.status === 'in progress' ? 'border-yellow-500 text-yellow-700 bg-yellow-50' : 
-                      'border-red-500 text-red-700 bg-red-50'}`}
-                  value={incident.status}
-                  onChange={(e) => handleStatusUpdate(incident._id, e.target.value)}
-                  disabled={updatingStatus === incident._id}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in progress">In Progress</option>
-                  <option value="resolved">Resolved</option>
-                </select>
               </div>
             </div>
           </motion.div>
@@ -320,12 +243,4 @@ const RecentIncidents = ({ onStatusUpdate = () => {} }) => {
   );
 };
 
-RecentIncidents.propTypes = {
-  onStatusUpdate: PropTypes.func
-};
-
-RecentIncidents.defaultProps = {
-  onStatusUpdate: () => {}
-};
-
-export default RecentIncidents;
+export default Incidents;
