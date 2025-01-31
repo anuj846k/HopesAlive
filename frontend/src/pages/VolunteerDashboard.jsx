@@ -2,91 +2,100 @@
 // import IncidentList from '../../components/volunteer/IncidentList';
 // import ActivitySummary from '../../components/volunteer/ActivitySummary';
 // import NotificationsList from '../../components/volunteer/NotificationsList';
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import VolunteerDashboardLayout from '../VolunteerDashCompo/VolunteerDashboardLayout';
-import IncidentList from '../VolunteerDashCompo/IncidentList';
-import ActivitySummary from '../VolunteerDashCompo/ActivitySummary';
-import NotificationsList from '../VolunteerDashCompo/NotificationsList';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import VolunteerDashboardLayout from "../VolunteerDashCompo/VolunteerDashboardLayout";
+import ActivitySummary from "../VolunteerDashCompo/ActivitySummary";
+import RecentCases from "../VolunteerDashCompo/RecentCases";
+import AvailableCasesNearby from "../VolunteerDashCompo/AvailableCasesNearby";
+import {
+  FaClock,
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaHandHoldingHeart,
+} from "react-icons/fa";
 
 const VolunteerDashboard = () => {
-  const [incidents, setIncidents] = useState([]);
-  const [activityStats, setActivityStats] = useState({});
-  const [notifications, setNotifications] = useState([]);
+  const [stats, setStats] = useState({
+    totalCases: 0,
+    activeCases: 0,
+    completedCases: 0,
+    responseRate: 0,
+  });
+  const [recentCases, setRecentCases] = useState([]);
+  const [availableCases, setAvailableCases] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const status = params.get('status');
-    
-    if (status === 'completed') {
-      // Clear the URL parameter
-      navigate('/voldash', { replace: true });
-      // Show success message
-      toast.success('Documents signed successfully!');
-    }
-  }, [location, navigate]);
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        console.log('Using token:', token?.substring(0, 20) + '...');
-
-        const response = await axios.get('https://hopesalive-zh55.onrender.com/api/volunteer/incidents', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        console.log('Full API Response:', response.data);
+        const token = localStorage.getItem("token");
         
-        if (response.data.success) {
-          setIncidents(response.data.data);
-          console.log('Set incidents:', response.data.data);
-        }
-
-        // Fetch notifications
-        const notificationsResponse = await axios.get(
-          'https://hopesalive-zh55.onrender.com/api/volunteer/notifications',
-          { headers: { Authorization: `Bearer ${token}` } }
+        // Fetch recent cases (assigned to volunteer)
+        const recentResponse = await axios.get(
+          "https://hopesalive-zh55.onrender.com/api/volunteer/my-cases",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
 
-        if (notificationsResponse.data) {
-          setNotifications(notificationsResponse.data);
+        if (recentResponse.data.success) {
+          setRecentCases(recentResponse.data.data);
         }
 
-        setLoading(false);
+        // Fetch available cases
+        const availableResponse = await axios.get(
+          "https://hopesalive-zh55.onrender.com/api/volunteer/incidents",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (availableResponse.data.success) {
+          setAvailableCases(availableResponse.data.data);
+        }
+
+        // Calculate stats
+        const activeCount = recentResponse.data.data.filter(
+          (c) => c.status === "in progress" || c.status === "pending"
+        ).length;
+
+        const completedCount = recentResponse.data.data.filter(
+          (c) => c.status === "resolved" || c.status === "completed"
+        ).length;
+
+        // Calculate response rate based on completed cases
+        const responseRate =
+          recentResponse.data.data.length > 0
+            ? Math.round((completedCount / recentResponse.data.data.length) * 100)
+            : 0;
+
+        setStats({
+          totalCases: recentResponse.data.data.length,
+          activeCases: activeCount,
+          completedCases: completedCount,
+          responseRate: responseRate,
+        });
       } catch (error) {
-        console.error('Fetch error:', error.response || error);
-        setError(error.message);
+        console.error("Error fetching dashboard data:", error);
+        toast.error("Failed to load dashboard data");
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    fetchDashboardData();
   }, []);
 
   if (loading) {
     return (
       <VolunteerDashboardLayout>
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-        </div>
-      </VolunteerDashboardLayout>
-    );
-  }
-
-  if (error) {
-    return (
-      <VolunteerDashboardLayout>
-        <div className="text-red-500 text-center p-4">
-          Error: {error}
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-200 border-t-orange-500" />
         </div>
       </VolunteerDashboardLayout>
     );
@@ -94,9 +103,39 @@ const VolunteerDashboard = () => {
 
   return (
     <VolunteerDashboardLayout>
-      <h1 className="text-2xl font-bold mb-6">Volunteer Dashboard</h1>
-      <IncidentList incidents={incidents} />
-      <NotificationsList notifications={notifications} />
+      <div className="space-y-6 mt-12">
+        {/* Welcome Section */}
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
+          <h1 className="text-2xl font-bold mb-2">Welcome Back, Volunteer!</h1>
+          <p className="text-orange-100">
+            Thank you for making a difference in animal lives.
+          </p>
+        </div>
+
+        {/* Stats Summary */}
+        <ActivitySummary stats={stats} />
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Recent Cases */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center">
+              <FaClock className="mr-2 text-orange-500" />
+              Your Recent Cases
+            </h2>
+            <RecentCases cases={recentCases} />
+          </div>
+
+          {/* Available Cases */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center">
+              <FaHandHoldingHeart className="mr-2 text-orange-500" />
+              Available Cases Nearby
+            </h2>
+            <AvailableCasesNearby cases={availableCases} />
+          </div>
+        </div>
+      </div>
     </VolunteerDashboardLayout>
   );
 };

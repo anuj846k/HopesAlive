@@ -6,6 +6,7 @@ import {
     updateVolunteerStatus,
     getVolunteerNotifications,
     getVolunteerIncidents,
+    getVolunteerAssignedCases,
 } from '../Controllers/volunteerController.js';
 // import Incident from '../models/Incident.js';
 import IncidentVolunteer from '../Models/IncidentVolunteer.js';
@@ -32,6 +33,8 @@ router.get('/my-assignments', protectedRoute, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.get('/my-cases', protectedRoute, getVolunteerAssignedCases);
 
 router.get('/:id', protectedRoute, async (req, res) => {
   try {

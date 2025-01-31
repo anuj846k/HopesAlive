@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import ConfirmationModal from './ConfirmationModel';
+import LoadingSpinner from '../DashboardCompo/LoadingSpinner';
 
 function IncidentList() {
   const [incidents, setIncidents] = useState([]);
@@ -120,9 +121,7 @@ function IncidentList() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
-      </div>
+      <LoadingSpinner/>
     );
   }
 

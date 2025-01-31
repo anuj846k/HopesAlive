@@ -188,3 +188,39 @@ export const getVolunteerIncidents = async (req, res) => {
     }
 };
 
+// Add this new controller function
+export const getVolunteerAssignedCases = async (req, res) => {
+    try {
+        const volunteerId = req.user._id;
+        
+        // Find incidents where this volunteer is assigned
+        const assignedCases = await Incident.find({
+            'volunteerActivity.assignedVolunteer': volunteerId
+        })
+        .select('animalInfo location status createdAt description volunteerActivity')
+        .sort('-volunteerActivity.assignedAt') // Most recently assigned first
+        .limit(5); // Limit to 5 recent cases
+
+        const formattedCases = assignedCases.map(incident => ({
+            id: incident._id,
+            animalInfo: incident.animalInfo,
+            location: incident.location,
+            status: incident.status,
+            createdAt: incident.createdAt,
+            assignedAt: incident.volunteerActivity?.assignedAt,
+            description: incident.description
+        }));
+
+        res.json({
+            success: true,
+            data: formattedCases
+        });
+    } catch (error) {
+        console.error('Error fetching assigned cases:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
+    }
+};
+

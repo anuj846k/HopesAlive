@@ -41,35 +41,23 @@ const Dashboard = () => {
   // Only show dashboard overview content on the index route
   const isDashboardIndex = location.pathname === "/dashboard";
 
-  // const quickActions = [
-  //   {
-  //     title: "Report Incident",
-  //     description: "Report a new animal in need",
-  //     icon: "🆘",
-  //     link: "/dashboard/report",
-  //     color: "blue",
-  //   },
-  //   {
-  //     title: "View Incidents",
-  //     description: "Check all reported cases",
-  //     icon: "📋",
-  //     link: "/dashboard/incidents",
-  //     color: "purple",
-  //   },
-  //   {
-  //     title: "Notifications",
-  //     description: "Check your notifications",
-  //     icon: "🔔",
-  //     link: "/dashboard/notifications",
-  //     color: "yellow",
-  //   },
-  // ];
 
   if (isDashboardIndex && loading) {
     return (
       <DashboardLayout>
         <div className="flex justify-center items-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <div className="relative">
+            <div className="w-16 h-16 rounded-full border-4 border-orange-200 animate-spin border-t-orange-500">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <svg className="w-8 h-8 text-orange-500" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M12,2L12,2c-0.6,0-1,0.4-1,1v2c0,0.6,0.4,1,1,1h0c0.6,0,1-0.4,1-1V3C13,2.4,12.6,2,12,2z"/>
+                  <path fill="currentColor" d="M12,18L12,18c-0.6,0-1,0.4-1,1v2c0,0.6,0.4,1,1,1h0c0.6,0,1-0.4,1-1v-2C13,18.4,12.6,18,12,18z"/>
+                  <path fill="currentColor" d="M21,11L21,11c0-0.6-0.4-1-1-1h-2c-0.6,0-1,0.4-1,1v0c0,0.6,0.4,1,1,1h2C20.6,12,21,11.6,21,11z"/>
+                  <path fill="currentColor" d="M5,11L5,11c0-0.6-0.4-1-1-1H2c-0.6,0-1,0.4-1,1v0c0,0.6,0.4,1,1,1h2C4.6,12,5,11.6,5,11z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </DashboardLayout>
     );

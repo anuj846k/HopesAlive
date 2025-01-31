@@ -19,6 +19,9 @@ import Incidents from "./DashboardCompo/Incidents";
 import Notifications from "./DashboardCompo/Notifications";
 import IncidentDetails from "./DashboardCompo/IncidentDetails";
 import NotFound from "./components/NotFound";
+import CaseDetails from './VolunteerDashCompo/CaseDetails';
+import VolunteerAssignedCases from "./pages/VolunteerAssignedCases";
+import AvailableCases from "./pages/AvailableCases";
 
 function App() {
   return (
@@ -53,6 +56,9 @@ function App() {
             path="/dashboard/incidents/:id"
             element={<IncidentDetails />}
           />
+          <Route path="/voldash/case/:id" element={<CaseDetails />} />
+          <Route path="/voldash/my-cases" element={<VolunteerAssignedCases />} />
+          <Route path="/voldash/available" element={<AvailableCases />} />
           <Route path="/*" element={<NotFound/>} />
         </Routes>
       </AuthProvider>
