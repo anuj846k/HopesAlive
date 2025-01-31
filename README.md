@@ -82,7 +82,10 @@ After signing the documents, both NGOs and volunteers can access their respectiv
 - Track ongoing rescues and closed cases.
 - Communicate with volunteers.
 
-![NGO Dashboard](https://i.imgur.com/JOncRPT.jpeg)
+![NGO Dashboard](https://i.imgur.com/Hr9MtSA.jpeg)
+
+### NGO Features
+![NGO features](https://i.imgur.com/cfAoPJZ.jpeg)
 
 ### Volunteer Dashboard
 
@@ -91,7 +94,7 @@ After signing the documents, both NGOs and volunteers can access their respectiv
 - Communicate with NGOs and other volunteers.
 - Close cases and submit feedback.
 
-![Volunteer Dashboard](https://i.imgur.com/GXxfKdu.jpeg)
+![Volunteer Dashboard](https://i.imgur.com/xs4BSEZ.jpeg)
 
 ---
 
@@ -114,7 +117,19 @@ After signing the documents, both NGOs and volunteers can access their respectiv
 - **Advanced AI Features** - Enhancing AI capabilities to predict distress-prone areas and optimize rescue efforts.
 - **Crowdfunding Integration** - Allowing users to donate directly to animal rescue cases via the platform.
 
+### Testing
+For testing please use the following email and password:
+- Ngo account:
+   - Email: nac1@example.com
+   - Password: 1234567
+- Volunteer account:
+   - Email: raj@example.com
+   - Password: 123456
+
+
 HopesAlive is dedicated to creating a more compassionate world for street animals. Join us in making a difference.
+
+
 
 
 ## 🛠️ Tech Stack  
