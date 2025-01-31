@@ -85,7 +85,7 @@ After signing the documents, both NGOs and volunteers can access their respectiv
 ![NGO Dashboard](https://i.imgur.com/Hr9MtSA.jpeg)
 
 ### NGO Features
-![NGO features](https://i.imgur.com/cfAoPJZ.jpeg)
+![NGO features](https://i.imgur.com/NiAb5Xt.jpeg)
 
 ### Volunteer Dashboard
 
