@@ -272,6 +272,8 @@ const RegisterForm = () => {
                             }
                             className="mt-1 block w-full h-12 rounded-lg border-gray-300 shadow-md focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 p-2"
                           />
+                          <p className="text-gray-500 mt-1 ml-1 text-sm" >Ex: weekend,weekdays or both</p>
+
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700">
