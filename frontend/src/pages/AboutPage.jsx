@@ -40,7 +40,7 @@ function AboutPage() {
               Our Mission to Protect and Care
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Since 2020, HopesAlive has been dedicated to the welfare of street animals, 
+              Since 2025, HopesAlive has been dedicated to the welfare of street animals, 
               creating a network of compassionate individuals and organizations working 
               together to make a difference.
             </p>
