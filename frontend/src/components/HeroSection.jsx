@@ -1,152 +1,243 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-// ... imports remain the same
+import { Heart, ArrowRight, Shield, Users, PawPrint } from 'lucide-react';
 
 function HeroSection() {
   return (
-    <div className="relative min-h-[90vh] bg-gradient-to-b from-orange-50/50 to-white font-poppins overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
+    <div className="relative min-h-screen bg-gradient-to-b from-orange-50 to-white font-sans overflow-hidden">
+      {/* Organic Background Pattern */}
+      <div className="absolute inset-0 opacity-15 pointer-events-none">
+        <svg width="100%" height="100%" className="absolute inset-0">
+          <pattern id="paw-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M30,50 Q40,35 50,50 Q60,65 50,80 Q40,95 30,80 Q20,65 30,50 Z" fill="#f97316" fillOpacity="0.1" />
+            <circle cx="42" cy="42" r="6" fill="#f97316" fillOpacity="0.1" />
+            <circle cx="58" cy="42" r="6" fill="#f97316" fillOpacity="0.1" />
+            <circle cx="42" cy="58" r="6" fill="#f97316" fillOpacity="0.1" />
+            <circle cx="58" cy="58" r="6" fill="#f97316" fillOpacity="0.1" />
+          </pattern>
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#paw-pattern)" />
+        </svg>
+      </div>
       
-      <div className="container mx-auto px-4 py-12 lg:py-20">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="container mx-auto px-4 pt-6 pb-12 md:py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Content */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center lg:text-left relative z-10"
+            className="text-center lg:text-left relative z-10 max-w-lg mx-auto lg:mx-0"
           >
             {/* Emergency Badge */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full mb-8 text-sm font-medium"
+              className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full mb-6 text-sm font-medium shadow-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
               </span>
-              24/7 Emergency Response Available
+              24/7 Emergency Response
             </motion.div>
 
-            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Every Life Matters, <br/>
-              <span className="text-orange-600">Every Action Counts</span>
-            </h1>
+            <motion.h1 
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 md:mb-6 leading-tight"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Every Paw Matters, <br className="hidden sm:block" />
+              <span className="text-orange-600">Every Rescue Counts</span>
+            </motion.h1>
             
-            <p className="text-lg lg:text-xl text-gray-600 mb-8 font-inter max-w-xl">
-              Join our mission to protect and care for street animals. Your quick action today could save a precious life.
-            </p>
+            <motion.p 
+              className="text-base sm:text-lg text-gray-600 mb-6 md:mb-8 font-normal max-w-md mx-auto lg:mx-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Join HopesAlive in our mission to protect and nurture street animals in need. Your swift action today could mean a lifetime for them tomorrow.
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-              <Link to="/report-incident">
+            <motion.div 
+              className="flex flex-col xs:flex-row gap-3 justify-center lg:justify-start mb-8 md:mb-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              <Link to="/report-incident" className="w-full xs:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-8 py-4 bg-orange-500 text-white rounded-xl hover:bg-orange-600 
+                  className="w-full px-6 py-3 sm:px-8 sm:py-4 bg-orange-500 text-white rounded-xl hover:bg-orange-600 
                            transition-all font-semibold shadow-lg hover:shadow-orange-200/50 
                            flex items-center justify-center gap-2 group"
                 >
-                  <span>Report Now</span>
-                  <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                  <PawPrint size={20} />
+                  <span>Report Animal</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
-              <Link to="/contact">
+              <Link to="/contact" className="w-full xs:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-8 py-4 bg-white text-orange-500 border-2 border-orange-500 
+                  className="w-full px-6 py-3 sm:px-8 sm:py-4 bg-white text-orange-500 border-2 border-orange-500 
                            rounded-xl hover:bg-orange-50 transition-all font-semibold 
                            flex items-center justify-center gap-2 group"
                 >
-                  <span>Join Us</span>
-                  <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                  <Heart size={20} />
+                  <span>Volunteer</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
-            </div>
+            </motion.div>
 
             {/* Trust Indicators */}
-            <div className="flex items-center gap-6 text-sm text-gray-500 justify-center lg:justify-start">
+            <motion.div 
+              className="flex flex-wrap justify-center lg:justify-start gap-y-3 gap-x-6 text-sm text-gray-600"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
               <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+                <div className="p-1 bg-orange-100 rounded-full">
+                  <PawPrint size={16} className="text-orange-500" />
+                </div>
                 <span>1000+ Animals Rescued</span>
               </div>
               <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+                <div className="p-1 bg-orange-100 rounded-full">
+                  <Shield size={16} className="text-orange-500" />
+                </div>
+                <span>24/7 Emergency Team</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="p-1 bg-orange-100 rounded-full">
+                  <Users size={16} className="text-orange-500" />
+                </div>
                 <span>Trusted by 50+ NGOs</span>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Right Content - Image Grid */}
+          {/* Right Content - Image Collage */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="hidden lg:grid grid-cols-2 gap-4 relative"
+            className="relative mt-8 lg:mt-0 max-w-md mx-auto lg:max-w-none"
           >
-            {/* Decorative Background */}
-            <div className="absolute -top-10 -right-10 w-72 h-72 bg-orange-200 rounded-full filter blur-3xl opacity-20" />
-            <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-blue-200 rounded-full filter blur-3xl opacity-20" />
+            {/* Mobile Image - Only visible on small screens */}
+            <motion.div
+              className="block lg:hidden overflow-hidden rounded-2xl shadow-xl relative aspect-[4/3]"
+              whileHover={{ scale: 1.02 }}
+            >
+              <img 
+                src="./rescue.jpg" 
+                alt="Animal rescue team in action" 
+                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <div className="flex items-center gap-2 mb-1">
+                  <Heart size={18} className="text-orange-400 fill-orange-400" />
+                  <span className="font-medium">Your help makes a difference</span>
+                </div>
+              </div>
+            </motion.div>
             
-            <div className="space-y-4">
+            {/* Desktop Image Grid - Only visible on large screens */}
+            <div className="hidden lg:grid grid-cols-2 gap-4 relative">
+              {/* Decorative Background Blobs */}
+              <div className="absolute -top-10 -right-10 w-72 h-72 bg-orange-200 rounded-full filter blur-3xl opacity-30" />
+              <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-emerald-200 rounded-full filter blur-3xl opacity-30" />
+              
+              <div className="space-y-4">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="overflow-hidden rounded-2xl shadow-xl h-48 relative"
+                >
+                  <img 
+                    src="./rescue.jpg" 
+                    alt="Veterinarian treating a street dog" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="overflow-hidden rounded-2xl shadow-xl h-64 relative"
+                >
+                  <img 
+                    src="./rescue2.png" 
+                    alt="Animal rescue team in action" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </motion.div>
+              </div>
+              <div className="space-y-4 mt-12">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="overflow-hidden rounded-2xl shadow-xl h-64 relative"
+                >
+                  <img 
+                    src="./rescue3.jpg" 
+                    alt="Volunteers feeding street animals" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="overflow-hidden rounded-2xl shadow-xl h-48 relative"
+                >
+                  <img 
+                    src="./rescue4.jpg" 
+                    alt="Successfully rescued and happy animal" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </motion.div>
+              </div>
+              
+              {/* Floating Badge */}
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="overflow-hidden rounded-2xl shadow-lg h-48 relative"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, duration: 0.5 }}
+                className="absolute -bottom-5 -left-5 bg-white shadow-xl rounded-xl px-4 py-2 flex items-center gap-2 z-10"
               >
-                <img 
-                  src="./rescue.jpg" 
-                  alt="Veterinarian treating a street dog" 
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="overflow-hidden rounded-2xl shadow-lg h-64 relative"
-              >
-                <img 
-                  src="./rescue2.png" 
-                  alt="Animal rescue team in action" 
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </motion.div>
-            </div>
-            <div className="space-y-4 mt-8">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="overflow-hidden rounded-2xl shadow-lg h-64 relative"
-              >
-                <img 
-                  src="./rescue3.jpg" 
-                  alt="Volunteers feeding street animals" 
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="overflow-hidden rounded-2xl shadow-lg h-48 relative"
-              >
-                <img 
-                  src="./rescue4.jpg" 
-                  alt="Successfully rescued and happy animal" 
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="h-8 w-8 bg-orange-100 rounded-full flex items-center justify-center">
+                  <Heart size={20} className="text-orange-500" />
+                </div>
+                <span className="font-medium text-gray-800">Make a difference today</span>
               </motion.div>
             </div>
           </motion.div>
         </div>
       </div>
+      
+      {/* Quick Action Floating Button - Mobile Only */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.5 }}
+        className="fixed bottom-6 right-6 z-50 lg:hidden"
+      >
+        <Link to="/report-incident">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center justify-center w-14 h-14 bg-orange-500 text-white rounded-full shadow-lg"
+          >
+            <PawPrint size={24} />
+          </motion.button>
+        </Link>
+      </motion.div>
     </div>
   );
 }
